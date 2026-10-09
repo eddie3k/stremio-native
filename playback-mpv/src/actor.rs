@@ -610,9 +610,12 @@ fn hardware_decoding_option(enabled: bool) -> &'static str {
     {
         "d3d11va-copy,auto-copy"
     }
+    // Zero-copy VA-API needs the native display handle passed to the render
+    // context. Prefer it, since copy-back costs memory bandwidth that older
+    // iGPUs share with the CPU, and keep copy decoding as the fallback.
     #[cfg(not(target_os = "windows"))]
     {
-        "auto-copy"
+        "vaapi,auto-copy"
     }
 }
 
